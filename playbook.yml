@@ -1,0 +1,7 @@
+---
+- name: Build out a GitLab "cluster" in AWS
+  hosts: all
+  connection: local
+
+  roles:
+    - inhumantsar.ec2-asgweb
