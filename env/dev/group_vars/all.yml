@@ -12,13 +12,13 @@ ec2_cluster_name: 'gitlab'
 ec2_ami: 'ami-a40912dd'
 ec2_instance_type: 't2.medium'
 ec2_assign_public_ip: 'yes'
+ec2_instance_profile_name: 'gitlab'
 
 manage_elb: false
 manage_cert: false
 asg_health_check_type: 'EC2'
 
 
-# vars file for dummy-role
 ssl_certs_common_name: "{{ elb_cert_domain }}"
 ssl_certs_path: "/tmp"
 ssl_certs_path_owner: "root"
