@@ -20,8 +20,8 @@ install:
   - ansible --version
 
 script:
-  - ansible-playbook playbook.yml --syntax-check
-  - ansible-playbook playbook.yml -c local -b
+  - ansible-playbook local.yml --syntax-check
+  - ansible-playbook local.yml -c local -b
   # add other playbooks here...
 
 notifications:

@@ -3,4 +3,4 @@ image: williamyeh/ansible:centos7
 test:
   script:
     - if [ -f 'requirements.yml' ]; then yum -y install git && ansible-galaxy install -r requirements.yml; fi
-    - ansible-playbook playbook.yml --connection=local -vvv
+    - ansible-playbook local.yml --connection=local -vvv

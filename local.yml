@@ -1,0 +1,37 @@
+---
+- name: Build out a GitLab "cluster" in AWS
+  hosts: all
+  connection: local
+  tasks:
+    - easy_install: name=pip
+    - pip:
+        name: ["boto", "boto3"]
+
+    - name: create vpc
+      include_role:
+        name: inhumantsar.ec2-vpc
+
+    - name: create instance profile to allow CI runner to launch instances
+      local_action:
+        module: iam_role
+        name: "{{ ec2_instance_profile_name }}"
+        state: present
+        assume_role_policy_document: |
+          {
+            "Version" : "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": [ "ec2.amazonaws.com" ]
+                },
+                "Action": [ "sts:AssumeRole" ]
+              }
+            ]
+          }
+        managed_policy:
+          - 'arn:aws:iam::aws:policy/AmazonElasticFileSystemFullAccess'
+          - 'arn:aws:iam::aws:policy/AmazonEC2FullAccess'
+
+    - name: build autoscale group
+      include_role: name=inhumantsar.ec2-asgweb
