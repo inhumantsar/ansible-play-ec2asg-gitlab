@@ -17,21 +17,37 @@ ec2_instance_profile_name: 'gitlab'
 manage_elb: true
 manage_cert: true
 
-asg_health_check_period: 60
+asg_health_check_period: 300
+asg_health_check_timeout: 600
 asg_health_check_type: 'ELB'
 
 elb_domain: 'gitlab.wlnpcc.ca'
+elb_listeners:
+  - protocol: http
+    load_balancer_port: 80
+    instance_port: "{{ elb_host_port }}"
+    proxy_protocol: True
+  - protocol: https
+    load_balancer_port: 443
+    instance_protocol: http
+    instance_port: "{{ elb_host_port }}"
+    ssl_certificate_id: "{{ elb_cert_arn }}"
+  - protocol: tcp
+    load_balancer_port: 22
+    instance_protocol: tcp
+    instance_port: 22
 elb_health_check:
   ping_protocol: http
   ping_port: '80'
-  ping_path: "/"    # only required for http/https
+  ping_path: "/users/sign_in"    # only required for http/https
   response_timeout: 5
-  interval: 25      # gitlab takes a long time to startup
+  interval: 25
   unhealthy_threshold: 10
   healthy_threshold: 2
 
-s3_bucket_name: "wlnpcc_gitlab_backups"  # dots in this name will cause ansible to throw
-                                  # ssl verification errors. https://github.com/ansible/ansible-modules-core/issues/1183
+# dots in this name will cause ansible to throw
+# ssl verification errors. https://github.com/ansible/ansible-modules-core/issues/1183
+s3_bucket_name: "wlnpcc_gitlab_backups"
 
 ssl_certs_common_name: "gitlab.wlnpcc.ca"
 ssl_certs_path: "/tmp"
