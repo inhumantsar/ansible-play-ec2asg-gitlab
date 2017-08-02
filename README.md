@@ -1,6 +1,6 @@
 # ec2asg-gitlab
 
-Launches a GitLab AMI into an ASG of 1.
+Launches a GitLab AMI into an ASG of 1. Also provisions an IAM role for permissions and S3 bucket for backups.
 
 ## Usage
 

@@ -32,6 +32,12 @@
         managed_policy:
           - 'arn:aws:iam::aws:policy/AmazonElasticFileSystemFullAccess'
           - 'arn:aws:iam::aws:policy/AmazonEC2FullAccess'
+          - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
+
+    - name: create s3 bucket for backups
+      local_action:
+        module: s3_bucket
+        name: "{{ s3_bucket_name }}"
 
     - name: build autoscale group
       include_role: name=inhumantsar.ec2-asgweb

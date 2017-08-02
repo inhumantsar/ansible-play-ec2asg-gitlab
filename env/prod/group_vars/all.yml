@@ -10,17 +10,30 @@ vpc_public_subnet_azs:
   '10.0.2.0/24': 'b'
 
 ec2_cluster_name: 'gitlab'
-ec2_ami: 'ami-5283992b'
+ec2_ami: 'ami-0bf61373'
 ec2_instance_type: 't2.medium'
 ec2_assign_public_ip: 'yes'
 ec2_instance_profile_name: 'gitlab'
 
-manage_elb: false
-manage_cert: false
-asg_health_check_type: 'EC2'
+manage_elb: true
+manage_cert: true
 
+asg_health_check_period: 60
+asg_health_check_type: 'ELB'
 
-ssl_certs_common_name: "{{ elb_cert_domain }}"
+elb_domain: 'gitlab.wlnpcc.ca'
+elb_health_check:
+  ping_protocol: http
+  ping_port: '80'
+  ping_path: "/"    # only required for http/https
+  response_timeout: 5
+  interval: 25      # gitlab takes a long time to startup
+  unhealthy_threshold: 10
+  healthy_threshold: 2
+
+s3_bucket_name: "gitlab.wlnpcc.ca_backups"
+
+ssl_certs_common_name: "gitlab.wlnpcc.ca"
 ssl_certs_path: "/tmp"
 ssl_certs_path_owner: "root"
 ssl_certs_path_group: "root"
