@@ -3,19 +3,11 @@
   hosts: all
   connection: local
   tasks:
-    - easy_install: name=pip
-    - pip:
-        name: ["boto", "boto3"]
-
-    - name: create vpc
-      include_role:
-        name: inhumantsar.ec2-vpc
-
-    - name: create instance profile to allow CI runner to launch instances
+    - name: manage instance profile to allow CI runner to launch instances
       local_action:
         module: iam_role
         name: "{{ ec2_instance_profile_name }}"
-        state: present
+        state: "{{ asgweb_service_state }}"
         assume_role_policy_document: |
           {
             "Version" : "2012-10-17",
@@ -34,10 +26,11 @@
           - 'arn:aws:iam::aws:policy/AmazonEC2FullAccess'
           - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
 
-    - name: create s3 bucket for backups
+    - name: manage s3 bucket for backups
       local_action:
         module: s3_bucket
         name: "{{ s3_bucket_name }}"
+        state: "{{ asgweb_service_state }}"
 
     - name: build autoscale group
       include_role: name=inhumantsar.ec2-asgweb

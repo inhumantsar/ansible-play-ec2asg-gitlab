@@ -1,17 +1,13 @@
-vpc_cidr: '10.0.0.0/16'
+asgweb_service_state: 'present'
+
 vpc_region: 'us-west-2'
 vpc_name: 'gitlab'
-vpc_public_subnet_cidrs:
-  - '10.0.1.0/24'
-  - '10.0.2.0/24'
-vpc_public_subnet_azs:
-  '10.0.1.0/24': 'a'
-  '10.0.2.0/24': 'b'
+vpc_id: 'vpc-6461cf02'
 
 ec2_cluster_name: 'gitlab'
 ec2_ami: 'ami-0bf61373'
 ec2_instance_type: 't2.medium'
-ec2_assign_public_ip: 'yes'
+ec2_assign_public_ip: false
 ec2_instance_profile_name: 'gitlab'
 
 manage_elb: true
@@ -54,7 +50,6 @@ ssl_certs_path: "/tmp"
 ssl_certs_path_owner: "root"
 ssl_certs_path_group: "root"
 
-
 instance_sg_rules:
   - proto: tcp
     from_port: 80
@@ -75,4 +70,4 @@ instance_sg_rules:
   - proto: tcp
     from_port: 2049
     to_port: 2049
-    cidr_ip: '{{ vpc_cidr }}'
+    cidr_ip: '10.0.0.0/16'
